@@ -1,0 +1,10 @@
+[package]
+name = "sorting-visualizer"
+version = "0.1.0"
+authors = ["Afaan Bilal"]
+license = "MIT"
+edition = "2021"
+
+[dependencies]
+crossterm = "0.26.1"
+tui = { package = "ratatui", version = "0.20.1" }

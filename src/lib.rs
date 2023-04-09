@@ -1,3 +1,9 @@
+/**
+ * Sorting Visualizer
+ *
+ * @author Afaan Bilal (https://afaan.dev)
+ * @link   https://github.com/AfaanBilal/sorting-visualizer
+ */
 /// Application.
 pub mod app;
 

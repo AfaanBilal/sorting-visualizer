@@ -1,3 +1,9 @@
+/**
+ * Sorting Visualizer
+ *
+ * @author Afaan Bilal (https://afaan.dev)
+ * @link   https://github.com/AfaanBilal/sorting-visualizer
+ */
 use std::io;
 use tui::backend::CrosstermBackend;
 use tui::Terminal;
@@ -13,7 +19,7 @@ fn main() -> AppResult<()> {
     // Initialize the terminal user interface.
     let backend = CrosstermBackend::new(io::stderr());
     let terminal = Terminal::new(backend)?;
-    let events = EventHandler::new(500);
+    let events = EventHandler::new(1000);
     let mut tui = Tui::new(terminal, events);
     tui.init()?;
 

@@ -1,3 +1,9 @@
+/**
+ * Sorting Visualizer
+ *
+ * @author Afaan Bilal (https://afaan.dev)
+ * @link   https://github.com/AfaanBilal/sorting-visualizer
+ */
 use crate::app::AppResult;
 use crossterm::event::{self, Event as CrosstermEvent, KeyEvent, MouseEvent};
 use std::sync::mpsc;

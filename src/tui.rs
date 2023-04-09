@@ -1,3 +1,9 @@
+/**
+ * Sorting Visualizer
+ *
+ * @author Afaan Bilal (https://afaan.dev)
+ * @link   https://github.com/AfaanBilal/sorting-visualizer
+ */
 use crate::app::{App, AppResult};
 use crate::event::EventHandler;
 use crossterm::event::{DisableMouseCapture, EnableMouseCapture};

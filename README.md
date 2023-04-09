@@ -11,7 +11,8 @@ A simple TUI visualizer of some sorting algorithms built with Rust.
 
 ## Screenshots
 
-> TODO!
+![screenshot 1](./screenshots/1.png)
+![screenshot 2](./screenshots/2.png)
 
 ---
 

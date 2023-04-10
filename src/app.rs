@@ -27,6 +27,10 @@ pub struct App {
     pub step_bubble: usize,
     /// Data to be sorted.
     pub data_bubble: Vec<u64>,
+    /// Current step of the algorithm.
+    pub step_selection: usize,
+    /// Data to be sorted.
+    pub data_selection: Vec<u64>,
 }
 
 impl Default for App {
@@ -35,10 +39,13 @@ impl Default for App {
             running: true,
 
             step_insertion: 0,
-            data_insertion: vec![8, 3, 7, 1, 6, 2, 5, 9, 10, 4],
+            data_insertion: vec![8, 3, 7, 1, 6, 2, 5, 4],
 
             step_bubble: 0,
-            data_bubble: vec![8, 3, 7, 1, 6, 2, 5, 9, 10, 4],
+            data_bubble: vec![8, 3, 7, 1, 6, 2, 5, 4],
+
+            step_selection: 0,
+            data_selection: vec![8, 3, 7, 1, 6, 2, 5, 4],
         }
     }
 }
@@ -77,10 +84,29 @@ impl App {
         }
     }
 
+    pub fn sort_selection(&mut self) {
+        if self.step_bubble < self.data_bubble.len() {
+            let len = self.data_bubble.len();
+
+            for left in 0..self.step_selection {
+                let mut smallest = left;
+                for right in (left + 1)..len {
+                    if self.data_selection[right] < self.data_selection[smallest] {
+                        smallest = right;
+                    }
+                }
+
+                self.data_selection.swap(smallest, left);
+            }
+            self.step_selection += 1;
+        }
+    }
+
     /// Handles the tick event of the terminal.
     pub fn tick(&mut self) {
         self.sort_insertion();
         self.sort_bubble();
+        self.sort_selection();
     }
 
     /// Renders the user interface widgets.
@@ -93,7 +119,14 @@ impl App {
 
         let main_row = Layout::default()
             .direction(Direction::Horizontal)
-            .constraints([Constraint::Percentage(50), Constraint::Percentage(50)].as_ref())
+            .constraints(
+                [
+                    Constraint::Percentage(33),
+                    Constraint::Percentage(33),
+                    Constraint::Percentage(33),
+                ]
+                .as_ref(),
+            )
             .split(main_column[1]);
 
         frame.render_widget(
@@ -111,6 +144,7 @@ impl App {
 
         self.render_sort("Insertion", frame, main_row[0]);
         self.render_sort("Bubble", frame, main_row[1]);
+        self.render_sort("Selection", frame, main_row[2]);
     }
 
     /// Render sort chart
@@ -118,12 +152,14 @@ impl App {
         let data = match algo {
             "Insertion" => &self.data_insertion,
             "Bubble" => &self.data_bubble,
+            "Selection" => &self.data_selection,
             _ => &self.data_insertion,
         };
 
         let step = match algo {
             "Insertion" => self.step_insertion,
             "Bubble" => self.step_bubble,
+            "Selection" => self.step_selection,
             _ => self.step_insertion,
         };
 

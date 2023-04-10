@@ -39,13 +39,13 @@ impl Default for App {
             running: true,
 
             step_insertion: 0,
-            data_insertion: vec![8, 3, 7, 1, 6, 2, 5, 4],
+            data_insertion: vec![8, 3, 7, 1, 6, 2, 5, 9, 4],
 
             step_bubble: 0,
-            data_bubble: vec![8, 3, 7, 1, 6, 2, 5, 4],
+            data_bubble: vec![8, 3, 7, 1, 6, 2, 5, 9, 4],
 
             step_selection: 0,
-            data_selection: vec![8, 3, 7, 1, 6, 2, 5, 4],
+            data_selection: vec![8, 3, 7, 1, 6, 2, 5, 9, 4],
         }
     }
 }
@@ -85,12 +85,11 @@ impl App {
     }
 
     pub fn sort_selection(&mut self) {
-        if self.step_bubble < self.data_bubble.len() {
-            let len = self.data_bubble.len();
-
+        if self.step_selection < self.data_selection.len() {
             for left in 0..self.step_selection {
                 let mut smallest = left;
-                for right in (left + 1)..len {
+
+                for right in (left + 1)..self.data_selection.len() {
                     if self.data_selection[right] < self.data_selection[smallest] {
                         smallest = right;
                     }
@@ -98,6 +97,7 @@ impl App {
 
                 self.data_selection.swap(smallest, left);
             }
+
             self.step_selection += 1;
         }
     }

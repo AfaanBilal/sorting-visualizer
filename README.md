@@ -7,6 +7,8 @@ A simple TUI visualizer of some sorting algorithms built with Rust.
 
 ### **Author**: [Afaan Bilal](https://afaan.dev)
 
+![Sorting Visualizer](./screenshots/sorting-visualizer-hero.png)
+
 ---
 
 ## Screenshots

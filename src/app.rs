@@ -11,6 +11,8 @@ use tui::style::{Color, Modifier, Style};
 use tui::terminal::Frame;
 use tui::widgets::{BarChart, Block, Borders, Paragraph};
 
+use rand::seq::SliceRandom;
+
 /// Application result type.
 pub type AppResult<T> = std::result::Result<T, Box<dyn error::Error>>;
 
@@ -31,6 +33,10 @@ pub struct App {
     pub step_selection: usize,
     /// Data to be sorted.
     pub data_selection: Vec<u64>,
+    /// Data to be sorted.
+    pub data_bogo: Vec<u64>,
+    /// Current step of the algorithm.
+    pub step_bogo: usize,
 }
 
 impl Default for App {
@@ -46,6 +52,9 @@ impl Default for App {
 
             step_selection: 0,
             data_selection: vec![8, 3, 7, 1, 6, 2, 5, 9, 4],
+
+            step_bogo: 0,
+            data_bogo: vec![8, 3, 7, 1, 6, 2, 5, 9, 4],
         }
     }
 }
@@ -102,11 +111,19 @@ impl App {
         }
     }
 
+    pub fn sort_bogo(&mut self) {
+        if !is_sorted(self.data_bogo.iter()) {
+            self.data_bogo.shuffle(&mut rand::thread_rng());
+            self.step_bogo += 1;
+        }
+    }
+
     /// Handles the tick event of the terminal.
     pub fn tick(&mut self) {
         self.sort_insertion();
         self.sort_bubble();
         self.sort_selection();
+        self.sort_bogo();
     }
 
     /// Renders the user interface widgets.
@@ -121,9 +138,10 @@ impl App {
             .direction(Direction::Horizontal)
             .constraints(
                 [
-                    Constraint::Percentage(33),
-                    Constraint::Percentage(33),
-                    Constraint::Percentage(33),
+                    Constraint::Percentage(25),
+                    Constraint::Percentage(25),
+                    Constraint::Percentage(25),
+                    Constraint::Percentage(25),
                 ]
                 .as_ref(),
             )
@@ -145,6 +163,7 @@ impl App {
         self.render_sort("Insertion", frame, main_row[0]);
         self.render_sort("Bubble", frame, main_row[1]);
         self.render_sort("Selection", frame, main_row[2]);
+        self.render_sort("Bogo", frame, main_row[3]);
     }
 
     /// Render sort chart
@@ -153,6 +172,7 @@ impl App {
             "Insertion" => &self.data_insertion,
             "Bubble" => &self.data_bubble,
             "Selection" => &self.data_selection,
+            "Bogo" => &self.data_bogo,
             _ => &self.data_insertion,
         };
 
@@ -160,6 +180,7 @@ impl App {
             "Insertion" => self.step_insertion,
             "Bubble" => self.step_bubble,
             "Selection" => self.step_selection,
+            "Bogo" => self.step_bogo,
             _ => self.step_insertion,
         };
 
@@ -183,5 +204,21 @@ impl App {
             .value_style(Style::default().fg(Color::Black).bg(Color::Green));
 
         frame.render_widget(bar_chart, area)
+    }
+}
+
+pub fn is_sorted<T: IntoIterator>(t: T) -> bool
+where
+    <T as IntoIterator>::Item: std::cmp::PartialOrd,
+{
+    let mut iter = t.into_iter();
+
+    if let Some(first) = iter.next() {
+        iter.try_fold(first, |previous, current| {
+            (previous > current).then_some(current)
+        })
+        .is_some()
+    } else {
+        true
     }
 }
